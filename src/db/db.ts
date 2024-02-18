@@ -2,9 +2,9 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
     user: 'nitish',
-    host: 'localhost',
-    database: 'db_test',
-    password: '123',
+    host: 'dpg-cn91g28l5elc73909mh0-a',
+    database: 'bitespeed_fj5u',
+    password: 'nl9GNah3DHtBCl5BAdXjLaSxcbnPp25q',
     port: 5432,
 });
 

@@ -6,27 +6,10 @@ services:
     ports:
       - "6001:6001"
     environment:
-      DATABASE_URL: postgresql://nitish:1234@db:5432/bitespeed
+      DATABASE_URL: postgres://nitish:nl9GNah3DHtBCl5BAdXjLaSxcbnPp25q@dpg-cn91g28l5elc73909mh0-a/bitespeed_fj5u
     depends_on:
       - db
     networks:
       - my-network
 
-  db:
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: bitespeed
-      POSTGRES_USER: nitish
-    volumes:
-      - my_postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - my-network
-
-volumes:
-  my_postgres_data:
-
-networks:
-  my-network:
+  
