@@ -27,16 +27,20 @@ export const identifyHandler = async (req: Request, res: Response): Promise<void
         const existingContactsByEmail: Contact[] = email ? await findContactByEmailOrPhone(email, "") : [];
         const existingContactsByPhone: Contact[] = phoneNumber ? await findContactByEmailOrPhone("", phoneNumber) : [];
         const allExistingContacts: Contact[] = [...new Set([...existingContactsByEmail, ...existingContactsByPhone])]; // Ensure uniqueness
-        console.log('here', );
+        console.log('existingContactsByEmail', existingContactsByEmail);
+        console.log('existingContactsByPhone', existingContactsByPhone);
+        console.log('allExistingContacts', allExistingContacts);
         let primaryContact: Contact | undefined;
 
         if (allExistingContacts.length > 0) {
             // Find any existing primary contact
             primaryContact = allExistingContacts.find(contact => contact.linkPrecedence === 'primary');
-
+            console.log('primaryContact', primaryContact)
             if (primaryContact) {
                 // Handle case where existing primary might become secondary
                 const isNewInformation = (email && primaryContact.email !== email) || (phoneNumber && primaryContact.phoneNumber !== phoneNumber);
+                console.log('isNewInformation', isNewInformation)
+
                 if (isNewInformation) {
                     // Check if there's a need to link two primary contacts
                     const otherPrimaryContact = allExistingContacts.find(contact => contact.id !== primaryContact?.id && contact.linkPrecedence === 'primary');
@@ -53,15 +57,16 @@ export const identifyHandler = async (req: Request, res: Response): Promise<void
             } else {
                 // If no primary contact exists among the found, create a new primary contact
                 primaryContact = await createContact(email, phoneNumber, 'primary');
+                console.log('primaryContact 2', primaryContact)
             }
         } else {
             // No existing contacts found, create a new primary contact
             primaryContact = await createContact(email, phoneNumber, 'primary');
+            console.log('here 2', primaryContact )
         }
-        console.log('here 2', )
         // Consolidate contacts for response
         const consolidatedContact: ConsolidatedContactResponse = await consolidateContacts(primaryContact?.id || 0);
-
+        console.log('consolidatedContact', consolidatedContact)
         res.status(200).json(consolidatedContact);
     } catch (error) {
         console.error('Error in identifyHandler:', error);
