@@ -23,6 +23,7 @@ export const createContact = async (email: string | null, phoneNumber: string | 
             RETURNING *;
         `;
         const values = [email, phoneNumber, linkPrecedence, linkedId];
+        console.log(values)
         const { rows } = await pool.query(query, values);
         return rows[0];
     } catch (error) {

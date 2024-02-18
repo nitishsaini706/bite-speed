@@ -23,10 +23,11 @@ export const identifyHandler = async (req: Request, res: Response): Promise<void
     const { email, phoneNumber } = req.body;
 
     try {
+        console.log('email', email)
         const existingContactsByEmail: Contact[] = email ? await findContactByEmailOrPhone(email, "") : [];
         const existingContactsByPhone: Contact[] = phoneNumber ? await findContactByEmailOrPhone("", phoneNumber) : [];
         const allExistingContacts: Contact[] = [...new Set([...existingContactsByEmail, ...existingContactsByPhone])]; // Ensure uniqueness
-
+        console.log('here', );
         let primaryContact: Contact | undefined;
 
         if (allExistingContacts.length > 0) {
@@ -57,7 +58,7 @@ export const identifyHandler = async (req: Request, res: Response): Promise<void
             // No existing contacts found, create a new primary contact
             primaryContact = await createContact(email, phoneNumber, 'primary');
         }
-
+        console.log('here 2', )
         // Consolidate contacts for response
         const consolidatedContact: ConsolidatedContactResponse = await consolidateContacts(primaryContact?.id || 0);
 
